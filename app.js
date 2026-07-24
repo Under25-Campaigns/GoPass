@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbwh_Ia6UctrF7sZdu7kmUNbA3Db-6O2nwuN-FoNHrC-LRzTsUWr2SrouRrHybNepvWkjw/exec?action=dashboard";
+const API_URL = "PASTE_YOUR_WEB_APP_URL_HERE?action=dashboard";
 
 const cardsContainer = document.getElementById("cardsContainer");
 const totalCounter = document.getElementById("totalCounter");
@@ -8,6 +8,7 @@ const searchInput = document.getElementById("search");
 let dashboardData = [];
 
 async function loadDashboard() {
+
     try {
 
         const response = await fetch(API_URL);
@@ -32,45 +33,43 @@ async function loadDashboard() {
 
     } catch (err) {
 
-        console.error(err);
-
-        cardsContainer.innerHTML = `
-            <div class="no-results">
-                Unable to load dashboard.
-            </div>
-        `;
+        cardsContainer.innerHTML =
+        `<div class="no-results">
+            Unable to load dashboard.
+        </div>`;
 
     }
+
 }
 
-function renderCards(search = "") {
+function renderCards(search=""){
 
-    cardsContainer.innerHTML = "";
+    cardsContainer.innerHTML="";
 
-    const keyword = search.trim().toLowerCase();
+    const keyword=search.trim().toLowerCase();
 
-    const filtered = dashboardData.filter(college =>
-        college.college.toLowerCase().includes(keyword)
+    const filtered=dashboardData.filter(c=>
+        c.college.toLowerCase().includes(keyword)
     );
 
-    if (!filtered.length) {
+    if(!filtered.length){
 
-        cardsContainer.innerHTML = `
-            <div class="no-results">
-                No colleges found.
-            </div>
-        `;
+        cardsContainer.innerHTML=
+        `<div class="no-results">
+            No colleges found.
+        </div>`;
 
         return;
+
     }
 
-    filtered.forEach(item => {
+    filtered.forEach(item=>{
 
-        const card = document.createElement("div");
+        const card=document.createElement("div");
 
-        card.className = "card";
+        card.className="card";
 
-        card.innerHTML = `
+        card.innerHTML=`
 
             <h2>${item.college}</h2>
 
@@ -84,7 +83,35 @@ function renderCards(search = "") {
                 0
             </div>
 
+            <div class="extra">
+
+                <div>
+                    <strong>POC</strong><br>
+                    ${item.poc}
+                </div>
+
+                <div style="margin-top:16px;">
+                    <strong>Vertical</strong><br>
+                    ${item.vertical}
+                </div>
+
+            </div>
+
         `;
+
+        card.onclick=function(){
+
+            document.querySelectorAll(".card.expanded").forEach(c=>{
+
+                if(c!==card){
+                    c.classList.remove("expanded");
+                }
+
+            });
+
+            card.classList.toggle("expanded");
+
+        };
 
         cardsContainer.appendChild(card);
 
@@ -94,9 +121,9 @@ function renderCards(search = "") {
 
 }
 
-function animateCardCounters() {
+function animateCardCounters(){
 
-    document.querySelectorAll(".number").forEach(counter => {
+    document.querySelectorAll(".number").forEach(counter=>{
 
         animateValue(
             counter,
@@ -109,32 +136,34 @@ function animateCardCounters() {
 
 }
 
-function animateValue(element, start, end, duration) {
+function animateValue(element,start,end,duration){
 
-    if (start === end) {
-        element.textContent = end.toLocaleString();
+    if(start===end){
+
+        element.textContent=end.toLocaleString();
+
         return;
+
     }
 
-    const range = end - start;
+    const range=end-start;
 
-    const startTime = performance.now();
+    const startTime=performance.now();
 
-    function update(currentTime) {
+    function update(currentTime){
 
-        const progress = Math.min(
-            (currentTime - startTime) / duration,
-            1
+        const progress=Math.min((currentTime-startTime)/duration,1);
+
+        const value=Math.floor(
+            start+range*(1-Math.pow(1-progress,3))
         );
 
-        const value = Math.floor(
-            start + range * easeOut(progress)
-        );
+        element.textContent=value.toLocaleString();
 
-        element.textContent = value.toLocaleString();
+        if(progress<1){
 
-        if (progress < 1) {
             requestAnimationFrame(update);
+
         }
 
     }
@@ -143,14 +172,12 @@ function animateValue(element, start, end, duration) {
 
 }
 
-function easeOut(t) {
-    return 1 - Math.pow(1 - t, 3);
-}
+searchInput.addEventListener("input",()=>{
 
-searchInput.addEventListener("input", () => {
     renderCards(searchInput.value);
+
 });
 
 loadDashboard();
 
-setInterval(loadDashboard, 30000);
+setInterval(loadDashboard,30000);
