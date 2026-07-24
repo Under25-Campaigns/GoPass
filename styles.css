@@ -222,3 +222,26 @@ body{
     }
 
 }
+
+.card{
+    cursor:pointer;
+    overflow:hidden;
+}
+
+.extra{
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+    transition:.3s;
+    margin-top:0;
+}
+
+.card.expanded{
+    min-height:320px;
+}
+
+.card.expanded .extra{
+    max-height:200px;
+    opacity:1;
+    margin-top:24px;
+}
