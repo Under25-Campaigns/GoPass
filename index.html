@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Goibibo GoPass Campaign Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<div class="container">
+
+    <header class="hero">
+
+        <h1>
+            Goibibo GoPass
+            <span>Campaign Dashboard</span>
+        </h1>
+
+        <div class="total-card">
+
+            <div class="label">
+                Total Registrations
+            </div>
+
+            <div id="totalCounter" class="count">
+                0
+            </div>
+
+            <div id="lastUpdated" class="updated">
+                Loading...
+            </div>
+
+        </div>
+
+    </header>
+
+    <div class="divider"></div>
+
+    <section class="search-section">
+
+        <input
+            type="text"
+            id="search"
+            placeholder="Search Colleges..."
+            autocomplete="off">
+
+    </section>
+
+    <section
+        id="cardsContainer"
+        class="cards-grid">
+
+    </section>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
