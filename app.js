@@ -1,4 +1,4 @@
-const API_URL = "PASTE_YOUR_WEB_APP_URL_HERE?action=dashboard";
+const API_URL = "https://script.google.com/macros/s/AKfycbwh_Ia6UctrF7sZdu7kmUNbA3Db-6O2nwuN-FoNHrC-LRzTsUWr2SrouRrHybNepvWkjw/exec?action=dashboard";
 
 const cardsContainer = document.getElementById("cardsContainer");
 const totalCounter = document.getElementById("totalCounter");
