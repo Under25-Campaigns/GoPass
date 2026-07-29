@@ -191,10 +191,10 @@ body{
 
 .rank{
     position:absolute;
-    top:18px;
     right:18px;
-    width:38px;
-    height:38px;
+    bottom:18px;
+    width:42px;
+    height:42px;
     border-radius:50%;
     background:rgba(255,255,255,.18);
     display:flex;
