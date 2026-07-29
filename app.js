@@ -105,51 +105,23 @@ function renderCards(search = "") {
 
         card.innerHTML = `
 
-            ${currentView === "leaderboard"
-                ? `<div class="rank">#${index + 1}</div>`
-                : ""}
+    <h2>${item.college}</h2>
 
-            <h2>${item.college}</h2>
+    <div class="small">
+        Registrations
+    </div>
 
-            <div class="small">
-                Registrations
-            </div>
+    <div
+        class="number"
+        data-target="${item.registrations}">
+        0
+    </div>
 
-            <div
-                class="number"
-                data-target="${item.registrations}">
-                0
-            </div>
+    ${currentView === "leaderboard"
+        ? `<div class="rank">#${index + 1}</div>`
+        : ""}
 
-            <div class="extra">
-
-                <div>
-                    <strong>POC</strong><br>
-                    ${item.poc}
-                </div>
-
-                <div style="margin-top:16px;">
-                    <strong>Vertical</strong><br>
-                    ${item.vertical}
-                </div>
-
-            </div>
-
-        `;
-
-        card.onclick = function () {
-
-            document.querySelectorAll(".card.expanded").forEach(c => {
-
-                if (c !== card) {
-                    c.classList.remove("expanded");
-                }
-
-            });
-
-            card.classList.toggle("expanded");
-
-        };
+`;
 
         cardsContainer.appendChild(card);
 
