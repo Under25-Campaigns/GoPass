@@ -5,7 +5,25 @@ const totalCounter = document.getElementById("totalCounter");
 const lastUpdated = document.getElementById("lastUpdated");
 const searchInput = document.getElementById("search");
 
+const collegeViewBtn = document.getElementById("collegeViewBtn");
+const leaderboardViewBtn = document.getElementById("leaderboardViewBtn");
+
 let dashboardData = [];
+let currentView = "college";
+
+collegeViewBtn.onclick = () => {
+    currentView = "college";
+    collegeViewBtn.classList.add("active");
+    leaderboardViewBtn.classList.remove("active");
+    renderCards(searchInput.value);
+};
+
+leaderboardViewBtn.onclick = () => {
+    currentView = "leaderboard";
+    leaderboardViewBtn.classList.add("active");
+    collegeViewBtn.classList.remove("active");
+    renderCards(searchInput.value);
+};
 
 async function loadDashboard() {
 
@@ -33,43 +51,63 @@ async function loadDashboard() {
 
     } catch (err) {
 
-        cardsContainer.innerHTML =
-        `<div class="no-results">
-            Unable to load dashboard.
-        </div>`;
+        cardsContainer.innerHTML = `
+            <div class="no-results">
+                Unable to load dashboard.
+            </div>
+        `;
 
     }
 
 }
 
-function renderCards(search=""){
+function renderCards(search = "") {
 
-    cardsContainer.innerHTML="";
+    cardsContainer.innerHTML = "";
 
-    const keyword=search.trim().toLowerCase();
+    const keyword = search.trim().toLowerCase();
 
-    const filtered=dashboardData.filter(c=>
+    let filtered = dashboardData.filter(c =>
         c.college.toLowerCase().includes(keyword)
     );
 
-    if(!filtered.length){
+    if (currentView === "college") {
 
-        cardsContainer.innerHTML=
-        `<div class="no-results">
-            No colleges found.
-        </div>`;
+        filtered.sort((a, b) =>
+            a.college.localeCompare(b.college)
+        );
+
+    } else {
+
+        filtered.sort((a, b) =>
+            b.registrations - a.registrations
+        );
+
+    }
+
+    if (!filtered.length) {
+
+        cardsContainer.innerHTML = `
+            <div class="no-results">
+                No colleges found.
+            </div>
+        `;
 
         return;
 
     }
 
-    filtered.forEach(item=>{
+    filtered.forEach((item, index) => {
 
-        const card=document.createElement("div");
+        const card = document.createElement("div");
 
-        card.className="card";
+        card.className = "card";
 
-        card.innerHTML=`
+        card.innerHTML = `
+
+            ${currentView === "leaderboard"
+                ? `<div class="rank">#${index + 1}</div>`
+                : ""}
 
             <h2>${item.college}</h2>
 
@@ -99,11 +137,11 @@ function renderCards(search=""){
 
         `;
 
-        card.onclick=function(){
+        card.onclick = function () {
 
-            document.querySelectorAll(".card.expanded").forEach(c=>{
+            document.querySelectorAll(".card.expanded").forEach(c => {
 
-                if(c!==card){
+                if (c !== card) {
                     c.classList.remove("expanded");
                 }
 
@@ -121,9 +159,9 @@ function renderCards(search=""){
 
 }
 
-function animateCardCounters(){
+function animateCardCounters() {
 
-    document.querySelectorAll(".number").forEach(counter=>{
+    document.querySelectorAll(".number").forEach(counter => {
 
         animateValue(
             counter,
@@ -136,34 +174,33 @@ function animateCardCounters(){
 
 }
 
-function animateValue(element,start,end,duration){
+function animateValue(element, start, end, duration) {
 
-    if(start===end){
+    if (start === end) {
 
-        element.textContent=end.toLocaleString();
-
+        element.textContent = end.toLocaleString();
         return;
 
     }
 
-    const range=end-start;
+    const range = end - start;
+    const startTime = performance.now();
 
-    const startTime=performance.now();
+    function update(currentTime) {
 
-    function update(currentTime){
-
-        const progress=Math.min((currentTime-startTime)/duration,1);
-
-        const value=Math.floor(
-            start+range*(1-Math.pow(1-progress,3))
+        const progress = Math.min(
+            (currentTime - startTime) / duration,
+            1
         );
 
-        element.textContent=value.toLocaleString();
+        const value = Math.floor(
+            start + range * (1 - Math.pow(1 - progress, 3))
+        );
 
-        if(progress<1){
+        element.textContent = value.toLocaleString();
 
+        if (progress < 1) {
             requestAnimationFrame(update);
-
         }
 
     }
@@ -172,12 +209,10 @@ function animateValue(element,start,end,duration){
 
 }
 
-searchInput.addEventListener("input",()=>{
-
+searchInput.addEventListener("input", () => {
     renderCards(searchInput.value);
-
 });
 
 loadDashboard();
 
-setInterval(loadDashboard,30000);
+setInterval(loadDashboard, 30000);
